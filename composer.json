@@ -1,0 +1,21 @@
+{
+    "name": "hrgruri/dijkstra",
+    "description": "dijkstra algorithm",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Yuya Aratani",
+            "email": "hrgruri@gmail.com"
+        }
+    ],
+    "require": {},
+    "require-dev": {
+        "phpunit/phpunit": "^5.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "Hrgruri\\Dijkstra\\": "src"
+        }
+    }
+}
