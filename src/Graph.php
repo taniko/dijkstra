@@ -1,5 +1,5 @@
 <?php
-namespace Hrgruri\Dijkstra;
+namespace Taniko\Dijkstra;
 
 class Graph
 {
@@ -10,6 +10,27 @@ class Graph
     {
         $this->nodes      = [];
         $this->total_cost = 0;
+    }
+
+    public static function create() : Graph
+    {
+        return new Graph();
+    }
+
+    public static function loadCsv(string $filename) : Graph
+    {
+        $graph  = Graph::create();
+        if (file_exists($filename)) {
+            $file   = new \SplFileObject($filename);
+            $file->setFlags(\SplFileObject::READ_CSV);
+            foreach ($file as $line) {
+                if (is_null($line[0])) {
+                    break;
+                }
+                $graph->add(trim($line[0]), trim($line[1]), trim($line[2]));
+            }
+        }
+        return $graph;
     }
 
     /**
@@ -31,6 +52,14 @@ class Graph
         return $this;
     }
 
+    public function remove(string $a, string $b)
+    {
+        if (isset($this->nodes[$a][$b])) {
+            unset($this->nodes[$a][$b]);
+            unset($this->nodes[$b][$a]);
+        }
+    }
+
     public function getNodes()
     {
         return $this->nodes;
@@ -44,9 +73,9 @@ class Graph
     public function cost(array $route)
     {
         $result = 0;
-        if (count($route) > 0){
+        if (count($route) > 0) {
             $num = count($route) -1;
-            for ($i = 0; $i < $num; $i++){
+            for ($i = 0; $i < $num; $i++) {
                 if (!isset($this->nodes[$route[$i]][$route[$i+1]])) {
                     throw new \UnexpectedValueException("edge from {$route[$i]} to {$route[$i+1]} does not exist");
                 }
@@ -82,18 +111,18 @@ class Graph
         foreach ($this->nodes as $key => $val) {
             $parent[$key] = null;
         }
-        foreach($this->nodes[$from] as $key => $val){
+        foreach ($this->nodes[$from] as $key => $val) {
             $distance[$key] = $this->nodes[$from][$key];
             $parent[$key]   = $from;
         }
         $visit[] = $from;
 
         // search shortest route
-        for(;;){
+        for (;;) {
             $min_distance   =   $this->total_cost + 1;
             $node           =   null;
             foreach (array_diff($nodes, $visit) as $key) {
-                if($distance[$key] < $min_distance){
+                if ($distance[$key] < $min_distance) {
                     $node           =   $key;
                     $min_distance   =   $distance[$key];
                 }
@@ -113,9 +142,9 @@ class Graph
         }
 
         $result = [];
-        for(;;){
+        for (;;) {
             $result[] = $node;
-            if($node === $from){
+            if ($node === $from) {
                 break;
             }
             $node = $parent[$node];

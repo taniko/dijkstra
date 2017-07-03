@@ -1,8 +1,22 @@
 <?php
-use Hrgruri\Dijkstra\Graph;
+namespace Test;
+
+use Taniko\Dijkstra\Graph;
 
 class GraphTest extends \PHPUnit\Framework\TestCase
 {
+    /**
+     * @test
+     */
+    public function loadCsv()
+    {
+        $graph = Graph::loadCsv(__DIR__.'/data/graph.csv');
+        $route = $graph->search('s', 't');
+        $cost  = $graph->cost($route);
+        $this->assertEquals(['s', 'b', 'c', 'd', 't'], $route);
+        $this->assertEquals(6, $cost);
+    }
+
     public function testAdd()
     {
         $graph = new Graph();
@@ -30,7 +44,7 @@ class GraphTest extends \PHPUnit\Framework\TestCase
             ->add('c', 'd', 3);
         try {
             $graph->cost(['a', 'b', 'd']);
-        } catch (UnexpectedValueException $e) {
+        } catch (\UnexpectedValueException $e) {
             $flag = true;
         } finally {
             $this->assertTrue($flag, 'not catched Exception');
@@ -67,7 +81,7 @@ class GraphTest extends \PHPUnit\Framework\TestCase
             ->add('e', 'f', 2);
         try {
             $graph->search('a', 'f');
-        } catch (UnexpectedValueException $e) {
+        } catch (\UnexpectedValueException $e) {
             $flag = true;
         } finally {
             $this->assertTrue($flag, 'not catched Exception');

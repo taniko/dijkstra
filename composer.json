@@ -1,5 +1,5 @@
 {
-    "name": "hrgruri/dijkstra",
+    "name": "taniko/dijkstra",
     "description": "dijkstra algorithm",
     "type": "library",
     "license": "MIT",
@@ -15,7 +15,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Hrgruri\\Dijkstra\\": "src"
+            "Taniko\\Dijkstra\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Test\\": "src"
         }
     }
 }
