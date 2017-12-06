@@ -1,16 +1,16 @@
 # Dijkstra's algorithm in PHP
-[![Build Status](https://travis-ci.org/hrgruri/dijkstra.svg?branch=master)](https://travis-ci.org/hrgruri/dijkstra)
+[![Build Status](https://travis-ci.org/taniko/dijkstra.svg?branch=master)](https://travis-ci.org/taniko/dijkstra)
 
 ---
 
 ## Installation
 ```sh
-composer require hrgruri/dijkstra
+composer require taniko/dijkstra
 ```
 
 ## Usage
 ```php
-$graph = Hrgruri\Dijkstra\Dijkstra::create();
+$graph = Taniko\Dijkstra\Graph::create();
 $graph
     ->add('s', 'a', 1)
     ->add('s', 'b', 2)
