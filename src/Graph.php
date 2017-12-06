@@ -3,8 +3,8 @@ namespace Taniko\Dijkstra;
 
 class Graph
 {
-    private $nodes;
-    private $total_cost;
+    private $nodes      = [];
+    private $total_cost = 0;
 
     public function __construct()
     {
@@ -37,30 +37,41 @@ class Graph
      * add edge
      * @param string $a        Node A
      * @param string $b        Node B
-     * @param int|double $distance distance
-     * @return Hrgruri\Dijkstra\Graph
+     * @param int|float $distance distance
+     * @return Taniko\Dijkstra\Graph
      */
-    public function add(string $a, string $b, $distance)
+    public function add(string $a, string $b, $distance) : Graph
     {
         if (!is_numeric($distance)) {
             return false;
         }
-        $distance = doubleval($distance);
+        $distance = floatval($distance);
         $this->total_cost   += $distance;
         $this->nodes[$a][$b] = $distance;
         $this->nodes[$b][$a] = $distance;
         return $this;
     }
 
-    public function remove(string $a, string $b)
+    /**
+     * remove edge
+     * @param  string $a Node A
+     * @param  string $b Node B
+     * @return Taniko\Dijkstra\Graph
+     */
+    public function remove(string $a, string $b) : Graph
     {
         if (isset($this->nodes[$a][$b])) {
             unset($this->nodes[$a][$b]);
             unset($this->nodes[$b][$a]);
         }
+        return $this;
     }
 
-    public function getNodes()
+    /**
+     * get node list
+     * @return array node list
+     */
+    public function getNodes() : array
     {
         return $this->nodes;
     }
@@ -70,7 +81,7 @@ class Graph
      * @param  array  $route
      * @return float
      */
-    public function cost(array $route)
+    public function cost(array $route) : float
     {
         $result = 0;
         if (count($route) > 0) {
@@ -91,7 +102,7 @@ class Graph
      * @param  string $to   node name
      * @return array node list
      */
-    public function search(string $from, string $to)
+    public function search(string $from, string $to) : array
     {
         if (!isset($this->nodes[$from]) || !isset($this->nodes[$to])) {
             throw new \UnexpectedValueException("node {$from} or node {$to} does not exist");
