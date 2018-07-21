@@ -29,7 +29,7 @@ class GraphTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(1, $nodes['b']['a']);
 
         $this->assertEquals(1, $nodes['a']['c']);
-        $this->assertNotEquals(1, $nodes['c']['a']);
+        $this->assertArrayNotHasKey('c', $nodes);
     }
 
     public function testAdd()
@@ -47,7 +47,7 @@ class GraphTest extends \PHPUnit\Framework\TestCase
         $graph->add('a', 'b', 1, false);
         $nodes = $graph->getNodes();
         $this->assertEquals(1, $nodes['a']['b']);
-        $this->assertNotEquals(1, $nodes['b']['a']);
+        $this->assertArrayNotHasKey('b', $nodes);
     }
 
     public function testCost()
