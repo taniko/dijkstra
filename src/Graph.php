@@ -27,7 +27,29 @@ class Graph
                 if (is_null($line[0])) {
                     break;
                 }
-                $graph->add(trim($line[0]), trim($line[1]), trim($line[2]));
+
+                if (isset($line[3])) {
+                    switch(strtolower(trim($line[3]))) {
+                        case '1':
+                        case 'true':
+                        case 'yes':
+                        case 'y':
+                            $addInverse = true;
+                            break;
+                        case '0':
+                        case 'false':
+                        case 'no':
+                        case 'n':
+                            $addInverse = false;
+                            break;
+                        default:
+                            throw new \UnexpectedValueException("optional 4th column must be a boolean value");
+                    }
+                } else {
+                    $addInverse = true;
+                }
+
+                $graph->add(trim($line[0]), trim($line[1]), trim($line[2]), $addInverse);
             }
         }
         return $graph;
@@ -35,12 +57,13 @@ class Graph
 
     /**
      * add edge
-     * @param string $a        Node A
-     * @param string $b        Node B
+     * @param string $a Node A
+     * @param string $b Node B
      * @param int|float $distance distance
-     * @return Taniko\Dijkstra\Graph
+     * @param bool $addInverseEdge
+     * @return Graph
      */
-    public function add(string $a, string $b, $distance) : Graph
+    public function add(string $a, string $b, $distance, bool $addInverseEdge = true) : Graph
     {
         if (!is_numeric($distance)) {
             return false;
@@ -48,7 +71,10 @@ class Graph
         $distance = floatval($distance);
         $this->total_cost   += $distance;
         $this->nodes[$a][$b] = $distance;
-        $this->nodes[$b][$a] = $distance;
+
+        if ($addInverseEdge) {
+            $this->nodes[$b][$a] = $distance;
+        }
         return $this;
     }
 
@@ -56,13 +82,17 @@ class Graph
      * remove edge
      * @param  string $a Node A
      * @param  string $b Node B
-     * @return Taniko\Dijkstra\Graph
+     * @param  bool $removeInverseEdge
+     * @return Graph
      */
-    public function remove(string $a, string $b) : Graph
+    public function remove(string $a, string $b, bool $removeInverseEdge = true) : Graph
     {
         if (isset($this->nodes[$a][$b])) {
             unset($this->nodes[$a][$b]);
-            unset($this->nodes[$b][$a]);
+
+            if($removeInverseEdge && isset($this->nodes[$b][$a])) {
+                unset($this->nodes[$b][$a]);
+            }
         }
         return $this;
     }

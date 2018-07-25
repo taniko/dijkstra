@@ -17,6 +17,21 @@ class GraphTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(6, $cost);
     }
 
+    /**
+     * @test
+     */
+    public function loadCsvWithoutInverse()
+    {
+        $graph = Graph::loadCsv(__DIR__.'/data/graph_without_inverse.csv');
+        $nodes = $graph->getNodes();
+
+        $this->assertEquals(1, $nodes['a']['b']);
+        $this->assertEquals(1, $nodes['b']['a']);
+
+        $this->assertEquals(1, $nodes['a']['c']);
+        $this->assertArrayNotHasKey('c', $nodes);
+    }
+
     public function testAdd()
     {
         $graph = new Graph();
@@ -24,6 +39,15 @@ class GraphTest extends \PHPUnit\Framework\TestCase
         $nodes = $graph->getNodes();
         $this->assertEquals(1, $nodes['a']['b']);
         $this->assertEquals(1, $nodes['b']['a']);
+    }
+
+    public function testAddWithoutInverse()
+    {
+        $graph = new Graph();
+        $graph->add('a', 'b', 1, false);
+        $nodes = $graph->getNodes();
+        $this->assertEquals(1, $nodes['a']['b']);
+        $this->assertArrayNotHasKey('b', $nodes);
     }
 
     public function testCost()
